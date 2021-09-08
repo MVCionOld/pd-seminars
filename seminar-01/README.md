@@ -42,7 +42,7 @@ __Распределенные__:
 Чтобы получить количество процессов, используется ```MPI_Comm_size```. Определить id процесса среди N запущенных 
 можно через ```MPI_Comm_rank```.
 
-![MPI Refecnce](pic/mpi_reference.png)
+![MPI Reference](pic/mpi_reference.png)
 
 Коммуникаторы -- некое абстрактное объединение множества процессов (на самом деле области связи над группами процессов).
 В рамках курса нам достаточно использовать ```MPI_COMM_WORLD```.
@@ -128,7 +128,7 @@ Mac OS: `brew install open-mpi`
 sbatch -n <NUM_OF_PROCESSES> ./run.sh
 ```
 
-sbatch-файл ```run.sh``` имеет вид:
+или с помощью sbatch-файла ```run_sbatch_config.sh```, который имеет вид:
 
 ```bash
 #!/usr/bin/env bash
@@ -140,7 +140,9 @@ sbatch-файл ```run.sh``` имеет вид:
 #SBATCH --error=error.txt
 mpiexec ./a.out
 ```
-
+```bash
+sbatch ./run_sbatch_config.sh
+```
 
 
 ### Полезные ссылки:
