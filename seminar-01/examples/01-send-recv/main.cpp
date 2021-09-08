@@ -2,24 +2,24 @@
 #include <iostream>
 
 /**
-    ----------------------------------------
-    | C type            MPI types          |
-    | ------------------------------------ |
-    | char	            MPI_CHAR           |
-    | unsigned char	    MPI_UNSIGNED_CHAR  |
-    | char	            MPI_SIGNED_CHAR    |
-    | short	            MPI_SHORT          |
-    | unsigned short    MPI_UNSIGNED_SHORT |
-    | int	              MPI_INT            |
-    | unsigned int	    MPI_UNSIGNED       |
-    | long int	        MPI_LONG           |
-    | unsigned long int	MPI_UNSIGNED_LONG  |
-    | long long int	    MPI_LONG_LONG_INT  |
-    | float	            MPI_FLOAT          |
-    | double	          MPI_DOUBLE         |
-    | long double	      MPI_LONG_DOUBLE    |
-    | unsigned char	    MPI_BYTE           |
-    ----------------------------------------
+    ------------------------------------------
+    | C type            | MPI types          |
+    | -------------------------------------- |
+    | char	            | MPI_CHAR           |
+    | unsigned char	    | MPI_UNSIGNED_CHAR  |
+    | char	            | MPI_SIGNED_CHAR    |
+    | short	            | MPI_SHORT          |
+    | unsigned short    | MPI_UNSIGNED_SHORT |
+    | int	              | MPI_INT            |
+    | unsigned int	    | MPI_UNSIGNED       |
+    | long int	        | MPI_LONG           |
+    | unsigned long int	| MPI_UNSIGNED_LONG  |
+    | long long int	    | MPI_LONG_LONG_INT  |
+    | float	            | MPI_FLOAT          |
+    | double	          | MPI_DOUBLE         |
+    | long double	      | MPI_LONG_DOUBLE    |
+    | unsigned char	    | MPI_BYTE           |
+    ------------------------------------------
 
     MPI_Status - структура, содержащая атрибуты сообщений, содержит три обязательных поля:
     { ...
@@ -27,6 +27,7 @@
       MPI_Tag    tag; // идентификатор сообщения
       MPI_Error  err; // код ошибки
     }
+    MPI_STATUS_IGNORE - преодпределенная константа для игнорирования параметра status
  */
 
 int main(int argc, char** argv) {
