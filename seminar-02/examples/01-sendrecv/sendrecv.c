@@ -1,5 +1,5 @@
-#include <iostream>
 #include <mpi.h>
+#include <stdio.h>
 
 int main (int argc, char *argv[]) {
     MPI_Init(&argc, &argv);
@@ -20,21 +20,23 @@ int main (int argc, char *argv[]) {
     }
 
     if (world_rank == 0) {
-        MPI_Sendrecv(buff, 5, MPI_INT, 1, MPI_ANY_TAG,
-                     &buff[5], 5, MPI_INT, 1, MPI_ANY_TAG,
-                     MPI_COMM_WORLD, MPI_IGNORE_STATUS);
+        MPI_Sendrecv(buff, 5, MPI_INT, 1, 0,
+                     &buff[5], 5, MPI_INT, 1, 0,
+                     MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     } else {
-        MPI_Sendrecv(&buff[5], 5, MPI_INT, 0, MPI_ANY_TAG,
-                     buff, 5, MPI_INT, 0, MPI_ANY_TAG,
-                     MPI_COMM_WORLD, MPI_IGNORE_STATUS);
+        MPI_Sendrecv(&buff[5], 5, MPI_INT, 0, 0,
+                     buff, 5, MPI_INT, 0, 0,
+                     MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    }
+
+    if (world_rank == 0) {
+        printf("0th process's array: ");
+        for (int i = 0; i < 10; i++) {
+            printf("%d ", buff[i]);
+        }
     }
 
     MPI_Finalize();
-
-    printf("0th process's array: ");
-    for (int i = 0; i < 10; i++) {
-        printf("%d ", buff[i]);
-    }
 
     return 0;
 }

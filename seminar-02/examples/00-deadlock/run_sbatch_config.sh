@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#SBATCH --ntasks=8
+#SBATCH --ntasks=2
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=RT
 #SBATCH --job-name=deadlockexample
