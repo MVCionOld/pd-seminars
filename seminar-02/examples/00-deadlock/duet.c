@@ -1,5 +1,5 @@
-#include <iostream>
 #include <mpi.h>
+#include <stdio.h>
 
 int main (int argc, char *argv[]) {
     MPI_Init(&argc, &argv);
@@ -20,13 +20,15 @@ int main (int argc, char *argv[]) {
     }
 
     if (world_rank == 0) {
-        MPI_Send(buff, 5, MPI_INT, 1, MPI_ANY_TAG, MPI_COMM_WORLD);
-        MPI_Recv(&buff[5], 5, MPI_INT, 1, MPI_ANY_TAG, MPI_COMM_WORLD, MPI_IGNORE_STATUS);
+        MPI_Recv(&buff[5], 5, MPI_INT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Send(buff, 5, MPI_INT, 1, 0, MPI_COMM_WORLD);
     } else {
-        MPI_Send(&buff[5], 5, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD);
-        MPI_Recv(buff, 5, MPI_INT, 0, MPI_ANY_TAG,  MPI_COMM_WORLD, MPI_IGNORE_STATUS);
+        MPI_Recv(buff, 5, MPI_INT, 0, 0,  MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Send(&buff[5], 5, MPI_INT, 0, 0, MPI_COMM_WORLD);
     }
 
-    MPI_Finalize ();
+    printf("world_rank: %d\n", world_rank);
+
+    MPI_Finalize();
     return 0;
 }
