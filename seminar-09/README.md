@@ -183,5 +183,62 @@ yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-streaming.jar \
     -mapper /bin/cat \
     -reducer /bin/wc
 ```
+что эквивалентно
+```shell
+yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-streaming.jar \
+    -input ${INPUT_DIR} \
+    -output ${OUTPUT_DIR} \
+    -mapper org.apache.hadoop.mapred.lib.IdentityMapper \
+    -reducer /bin/wc
+```
+
+Про возможности YARN лучше всего прочитать в самой [документации](https://hadoop.apache.org/docs/r2.8.5/hadoop-yarn/hadoop-yarn-site/YarnCommands.html#application).
+
+См. пример в `examples/00-word-count`.
+```shell
+#!/bin/bash
+
+OUT_DIR="streaming_wc_result"
+NUM_REDUCERS=8
+
+hadoop fs -rm -r -skipTrash $OUT_DIR*  # удаляем результаты предыдущего запуска (HDFS не перезаписывает данные поэтому без удаления выдаст ошибку о том, что путь занят).
+
+yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-streaming.jar \  # подключаем jar-файл с инструментами Hadoop Streaming
+    -D mapred.job.name="my_wordcout_example" \  # задаем имя нашей джобе
+    -D mapreduce.job.reduces=${NUM_REDUCERS} \  # устанавливаем кол-во reducer'ов в задаче
+    -files mapper.py,reducer.py \  # добавляем файлы в distributed cache чтоб каждая нода имела к ним доступ
+    -mapper mapper.py \  # для такой записи файлы должны быть исполняемыми
+    -reducer reducer.py \  # в противном случае пишем `python mapper.py`, `bash mapper.py` в зависимости о того, на чём написан код.
+    -input /data/wiki/en_articles_part \  # входны и выходные данные
+    -output $OUT_DIR # относительный путь (= /user/par2018XX/${OUT_DIR})
+
+# Проверка результата.
+# Каждый reducer генерирует вывод в свой файл. Файлы имеют вид `part-XXXXX`.
+for num in `seq 0 $(($NUM_REDUCERS - 1))`
+do
+    hdfs dfs -cat ${OUT_DIR}/part-0000$num | head  # Выводим 1-е 10 строк из каждого файла. 
+done
+```
+
+При теоретическом разборе мы решали задачки не в один проход Map/Reduce, т.е. в несколько джоб.
+Для практической реализации требуется написать несколько мапперов, редьюсеров и последовательно запустить их как
+отдельные джобы.
+
+Пример использования `Distributed Cache` можно посмотреть в примере `examples/01-stop-words`.
+
+#### Счетчики
+
+После выполнения таски в MapReduce, можно увидеть счетчики. 
+Эти счетчики в Hadoop MapReduce предоставляют большой объем статистической информации о выполненном таски. 
+Помимо предоставления информации о задачах, эти счетчики также помогают диагностировать проблемы, поиск узких горлых и 
+в редких случаях заменить стадию Reduce, например посчитать общее количество записей/посчитать количество упавших строк с
+парсингом.
+  
+В Hadoop Streaming реализовать счетчики довольно просто:
+```shell
+A streaming process can use the stderr to emit counter information. reporter:counter:<group>,<counter>,<amount> should be sent to stderr to update the counter.
+```
+Т.е. достаточно написать в стандартных поток ошибок сообщение формата: `reporter:counter:<group>,<counter>,<amount>`.  
+См. пример в `examples/02-stop-words-counters`.
 
 ### Hadoop MapReduce Java API
