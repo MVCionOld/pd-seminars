@@ -242,3 +242,7 @@ A streaming process can use the stderr to emit counter information. reporter:cou
 См. пример в `examples/02-stop-words-counters`.
 
 ### Hadoop MapReduce Java API
+
+[Общий ридинг](https://gitlab.com/fpmi-atp/pd2021-supplementary/global/-/blob/master/materials/09-mapreduce_part2.md#hadoop-java-api)
+
+[Документация](https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html)
