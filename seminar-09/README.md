@@ -242,7 +242,7 @@ A streaming process can use the stderr to emit counter information. reporter:cou
 См. пример в `examples/02-stop-words-counters`.  
   
 Ранее оговаривалось, что Streaming не завязан на конкретном языке программирования. Пример `examples/04-pi-monte-carlo` 
-показывает, что помимо привычных нам Java и Python можно использовать С/С++. Сам пример реализует метод Монте-Карло для 
+показывает, что помимо привычных нам Java и Python можно использовать С/С++! Сам пример реализует метод Монте-Карло для 
 подсчета числа пи: значения из группы счетчиков `Monte Carlo` надо разделить друг на друга и в ответе получить число, приближенное к `пи / 4`:
 ```shell
         Monte Carlo
@@ -252,6 +252,71 @@ A streaming process can use the stderr to emit counter information. reporter:cou
 
 ### Hadoop MapReduce Java API
 
-[Общий ридинг](https://gitlab.com/fpmi-atp/pd2021-supplementary/global/-/blob/master/materials/09-mapreduce_part2.md#hadoop-java-api)
+[Документация от Apache](https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html)
 
-[Документация](https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html)
+#### Класс Job
+Содержит описание MapReduce задачи:
+ * `input`/`output` пути
+ * формат `input`/`output` данных
+ * указание классов для `mapper`, `reducer`, `combiner`, `partitioner`
+ * типы значений пар `(key; value)`
+ * количество редьюсеров
+#### Метод `run()`. Важные моменты.
+
+1. Форматы ввода-вывода:
+```java
+job1.setInputFormatClass(TextInputFormat.class);
+job1.setOutputFormatClass(TextOutputFormat.class);
+```
+Это форматы, в которых пишется результат Job'ы. В Hadoop есть несколько встроенных форматов ввода-вывода. Основные:
+**TextInputFormat / TextOutputFormat**
+Результат пишется в стандартный текстовый файл.
+Плюсы: быстро работает.
+Минусы: теряет данные о типах ключей-значений. При считывании данных будем иметь пары `(LongWritable offset, Text rawString)`. rawString нужно парсить.
+
+**KeyValueTextInputFormat / KeyValueTextOutputFormat**
+Улучшенная версия предыдущего. Типы ключей-значений хранит только если это простые типы (например, IntWritable, Text).
+
+**SequenceFileInputFormat / SequenceFileTextOutputFormat**
+Плюсы: хранит типы ключей-значений.
+Минусы: Выходной файл будет записан в формате бинарного файла и прочитать его командой `hdfs dfs -cat` не выйдет.
+
+В итоге:
+* в промежуточных job'ах лучше использовать форматы KeyValue или SequenceFile.
+* В последней job'е - TextOutputFormat
+
+Любой Input / OutputFormat позволяет задавать сжатие. Это сэкономит затраты на передачу по сети.
+
+```java
+SequenceFileOutputFormat.setOutputCompressionType(job, CompressionType.BLOCK);
+SequenceFileOutputFormat.setCompressOutput(job, true);
+```
+
+CompressionType - механизм сжатия. Бывает `BLOCK` (сжимаем поблочно) и `RECORD` (сжимаем записи раздельно).
+
+*CompressionType:  Тем, кто слушает Java, полезно посмотреть на хорошую реализацию `enum` с полями и методами.*
+
+[Больше](http://timepasstechies.com/input-formats-output-formats-hadoop-mapreduce/) входных и выходных форматов.
+
+2. Задание кол-ва мапперов и редьюсеров.
+
+`job.setNumReduceTasks(8);` - задаем кол-во редьюсеров.
+Число мапперов напрямую задать нельзя. Система устанавливает его равным кол-ву сплитов.
+* Размер сплита можно изменять (по умолчанию равен размеру блока)
+* В логах Hadoop-задачи можно найти строчку: `19/10/14 21:37:44 INFO mapreduce.JobSubmitter: number of splits:2`.
+
+#### Мапперы и редьюсеры
+
+Соoтветствуют паттерну, см. [выше](/distribute/practice/03-hadoop2.md#%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0-mapreduce-task-map-reduce). В отличие от Hadoop Streaming, цикл обхода сплита писать не надо.
+Выполняются на нодах.
+
+#### Классы-обёртки
+В Hadoop существует 2 интерфейса: `Writable` и `WritableComparable`. Оба они поддерживают сериализацию / десериализацию, нужную для передачи данных между нодами.
+* Типы входных-выходных ключей должны реализовывать интерфейс `WritableComparable` (т.к. их придётся сравнивать на этапе сортировки).
+* Для значений достаточно `Writable`.
+* Классы-обёртки, входящие в поставку Hadoop, реализовывают интерфейс `WritableComparable`.
+
+#### Сборка и запуск программмы
+Собирать Java-проект можно с помощью ant или maven. См. соответственно build.xml и pom.xml в `/home/velkerr/seminars/pd2020/05_wordcount_java`.
+Запуск программы: `hadoop jar <путь_к_jar> <полное_имя_главного_класса> <вход> <выход> [другие_аргументы (напр. кол-во редьюсеров)]`
+
