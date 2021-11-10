@@ -239,7 +239,16 @@ done
 A streaming process can use the stderr to emit counter information. reporter:counter:<group>,<counter>,<amount> should be sent to stderr to update the counter.
 ```
 Т.е. достаточно написать в стандартных поток ошибок сообщение формата: `reporter:counter:<group>,<counter>,<amount>`.  
-См. пример в `examples/02-stop-words-counters`.
+См. пример в `examples/02-stop-words-counters`.  
+  
+Ранее оговаривалось, что Streaming не завязан на конкретном языке программирования. Пример `examples/04-pi-monte-carlo` 
+показывает, что помимо привычных нам Java и Python можно использовать С/С++. Сам пример реализует метод Монте-Карло для 
+подсчета числа пи: значения из группы счетчиков `Monte Carlo` надо разделить друг на друга и в ответе получить число, приближенное к `пи / 4`:
+```shell
+        Monte Carlo
+                Inside points=15564
+                Total points=20000
+```
 
 ### Hadoop MapReduce Java API
 
