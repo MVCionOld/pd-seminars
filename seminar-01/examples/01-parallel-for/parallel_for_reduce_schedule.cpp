@@ -4,7 +4,7 @@
 int main (int argc, char **argv) {
     int sum = 0;
 
-#pragma omp parallel for schedule(dynamic, 1000) reduction(+:sum)
+#pragma omp parallel for schedule(guided, 100) reduction(+:sum)
     for (int i = 0; i < 10000; i++) {
         sum += 1;
     }

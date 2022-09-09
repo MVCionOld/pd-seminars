@@ -17,7 +17,7 @@ int main (int argc, char *argv[]) {
 
     double start = omp_get_wtime();
 
-#pragma omp parallel for reduction(+:integral)
+#pragma omp parallel for schedule(dynamic, 100000) reduction(+:integral)
     for (int i = 1; i <= N; i++) {
         double part = (f(dx * i) + f(dx * (i - 1))) * dx / 2;  // площадь трапеции
         integral = integral + part;

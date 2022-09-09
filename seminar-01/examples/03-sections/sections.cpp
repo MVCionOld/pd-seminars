@@ -24,8 +24,8 @@ int main (int argc, char **argv) {
 
     int num_threads = omp_get_num_threads();
 
-    int threads_counter[10];
-    for (int index = 0; index < 10; ++index) {
+    int threads_counter[4];
+    for (int index = 0; index < 4; ++index) {
         threads_counter[index] = 0;
     }
 
@@ -51,12 +51,11 @@ int main (int argc, char **argv) {
                 }
             }
         }
-
     }
 
     double end_time = omp_get_wtime();
 
-    for (int index = 0; index < 10; ++index) {
+    for (int index = 0; index < 4; ++index) {
         std::cout << threads_counter[index] << " ";
     }
     std::cout << std::endl;
