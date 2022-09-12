@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-CONTAINER_NAME=pd-openmp
+CONTAINER_NAME=pd-mpi
 
 docker run -d --volume=`pwd`:/home --name="${CONTAINER_NAME}" ubuntu:18.04 tail -f /dev/null
 docker exec -t "${CONTAINER_NAME}" apt update
