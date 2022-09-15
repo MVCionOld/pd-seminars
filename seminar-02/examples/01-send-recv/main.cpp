@@ -10,14 +10,14 @@
     | char	            | MPI_SIGNED_CHAR    |
     | short	            | MPI_SHORT          |
     | unsigned short    | MPI_UNSIGNED_SHORT |
-    | int	              | MPI_INT            |
+    | int	            | MPI_INT            |
     | unsigned int	    | MPI_UNSIGNED       |
     | long int	        | MPI_LONG           |
     | unsigned long int	| MPI_UNSIGNED_LONG  |
     | long long int	    | MPI_LONG_LONG_INT  |
     | float	            | MPI_FLOAT          |
-    | double	          | MPI_DOUBLE         |
-    | long double	      | MPI_LONG_DOUBLE    |
+    | double	        | MPI_DOUBLE         |
+    | long double	    | MPI_LONG_DOUBLE    |
     | unsigned char	    | MPI_BYTE           |
     ------------------------------------------
 
