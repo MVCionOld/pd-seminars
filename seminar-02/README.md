@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 команды
 
 ```[bash]
-module add mpi/openmpi4-x86_64
+module add intel/oneapi/mpi/latest
 ```
 
 После этого ```mpicc``` и ```mpic++``` подгрузятся в `$PATH` и можно:
