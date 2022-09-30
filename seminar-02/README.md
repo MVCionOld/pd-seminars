@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 команды
 
 ```[bash]
-module add intel/oneapi/mpi/latest
+module add centos/8/mpi/hpcx-v2.7.0
 ```
 
 После этого ```mpicc``` и ```mpic++``` подгрузятся в `$PATH` и можно:
