@@ -1,5 +1,9 @@
 #include <iostream>
 
+/*
+  __shfl_down_sync:
+    https://developer.nvidia.com/blog/using-cuda-warp-level-primitives/
+ */
 __device__ void WarpReduce(volatile int* shared_data, int tid) {
     
     shared_data[tid] += shared_data[tid + 32];

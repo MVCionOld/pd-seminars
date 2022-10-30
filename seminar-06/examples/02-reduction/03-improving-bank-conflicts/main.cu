@@ -1,5 +1,27 @@
 #include <iostream>
 
+/*
+1st iteration:
+ 0th -> [0] + [1]
+ 1st -> [2] + [3]
+ 2nd -> [4] + [5]
+ ...
+2nd iteration:
+ 0th -> ([0] + [1]) + ([2] + [3])
+ 1st -> ([4] + [5]) + ([6] + [7])
+ 2nd -> ([8] + [9]) + ([10] + [11])
+ ...
+3rd iteration:
+ 0th -> (([0] + [1]) + ([2] + [3])) + (([4] + [5]) + ([6] + [7]))
+ 1st -> ([8] + [9]) + ([10] + [11]) + ([12] + [13]) + ([14] + [15])
+ 2nd -> ...
+  ...
+4th iteration:
+ 0th -> [0] + ... + [15]
+ 1st -> [16] + ... + [31]
+ ...
+*/
+
 __global__ void Reduce(int* in_data, int* out_data) {
     extern __shared__ int shared_data[];
 

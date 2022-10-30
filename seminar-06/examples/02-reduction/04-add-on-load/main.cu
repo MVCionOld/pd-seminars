@@ -1,5 +1,9 @@
 #include <iostream>
 
+/*
+ Та же суть, что и в предыдущем примере, но при загрузке
+ в shared memory мы кладем преподсчитанные частичне суммы
+ */
 __global__ void Reduce(int* in_data, int* out_data) {
     extern __shared__ int shared_data[];
 
