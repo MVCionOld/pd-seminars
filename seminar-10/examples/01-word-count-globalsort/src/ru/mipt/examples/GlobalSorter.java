@@ -1,4 +1,4 @@
-package ru.mipt;
+package ru.mipt.examples;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;

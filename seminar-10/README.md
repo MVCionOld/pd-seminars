@@ -17,7 +17,7 @@
 ```
 Login    ср. кол-во команд на сессию     общее кол-во сессий
 ```
-Путь к данным: `/data/minectaft_user_activity`
+Путь к данным: `/data/minecraft_user_activity`
 
 #### Пример вывода:
 ```
@@ -47,7 +47,7 @@ yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-streaming.jar \
     -D stream.num.map.output.key.fields=3 \
     -D mapreduce.job.reduces=1 \
     -D mapreduce.job.output.key.comparator.class=org.apache.hadoop.mapreduce.lib.partition.KeyFieldBasedComparator \
-    -D mapreduce.partition.keycomparator.options='-k2,2nr -k1' \
+    -D mapreduce.partition.keycomparator.options='-k2nr -k1' \
     -mapper cat \
     -reducer cat \
     -input ${IN_DIR} \
@@ -78,7 +78,7 @@ Partitioner'y как надо распределять ключи по редь�
 Как только дошли до границы хотя бы по одному аргументу, семплирование прекращаем.
 
 Такой Sampler подаётся в TotalOrderPartitioner. Подробнее см. "Hadoop. The definitive guide, 4 изд. стр. 287".
-Пример WordCount с глобальной сортировкой: `examples/00-word-count-globalsort`.
+Пример WordCount с глобальной сортировкой: `examples/01-word-count-globalsort`.
 
 ---
 
