@@ -1,0 +1,32 @@
+<project name="StackExchangeCountHistograms" default="jar" basedir=".">
+  <!-- set global properties for this build -->
+  <property name="name" value="StackExchangeCountHistograms"/>
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist" location="jar"/>
+  <path id="hadoop.classes">
+    <pathelement path="/opt/cloudera/parcels/CDH-5.9.0-1.cdh5.9.0.p0.23/lib/hadoop/hadoop-common.jar"/>
+    <pathelement path="/opt/cloudera/parcels/CDH-5.9.0-1.cdh5.9.0.p0.23/lib/hadoop-mapreduce/hadoop-mapreduce-client-core.jar"/>
+  </path>
+
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init" description="compile the source" >
+    <javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+       <classpath refid="hadoop.classes"/>
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile" description="make jar file" >
+    <mkdir dir="${dist}"/>
+    <jar jarfile="${dist}/${name}.jar" basedir="${build}"/>
+  </target>
+
+  <target name="clean" description="clean up" >
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+</project>
