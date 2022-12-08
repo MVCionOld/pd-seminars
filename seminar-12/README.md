@@ -86,12 +86,10 @@ CREATE TEMPORARY FUNCTION <your_udf> AS 'com.your.OwnUDF';
 |              |143|
 |              |     233      |
 |              |      0       |
-|              |  2147483647  |
 | 14.226.82.11 |14|
 |              |     226      |
 |              |      82      |
 |              |      11      |
-|              |  2147483647  |
 
 #### III. User-defined aggregation functions (UDAF)
 
